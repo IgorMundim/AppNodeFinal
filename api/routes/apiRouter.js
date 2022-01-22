@@ -124,7 +124,7 @@ apiRouter.post(endpoint + 'seguranca/register', userNameIsAvailable, emailIsAvai
 })
 
 apiRouter.post(endpoint + 'seguranca/login', (req, res) => {
-
+    console.log("aqui")
     knex
         .select('*').from('usuario')
         .where({ login: req.body.login })
