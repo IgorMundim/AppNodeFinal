@@ -134,11 +134,11 @@ apiRouter.post(endpoint + 'seguranca/login', (req, res) => {
                 let checkSenha = bcrypt.compareSync(req.body.senha, usuario.senha)
                 console.log("aqui")
                 if (checkSenha) {
-                    // let tokenJWT = jwt.sign({ id: usuario.id },
-                    //     process.env.SECRET_KEY,
-                    //     {
-                    //         expiresIn: 3600
-                    //     })
+                    let tokenJWT = jwt.sign({ id: usuario.id },
+                        process.env.SECRET_KEY,
+                        {
+                            expiresIn: 3600
+                        })
                     res.status(200).json({
                         messageAlert: null,
                         //token: tokenJWT
