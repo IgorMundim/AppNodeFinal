@@ -141,7 +141,7 @@ apiRouter.post(endpoint + 'seguranca/login', (req, res) => {
                         })
                     res.status(200).json({
                         messageAlert: null,
-                        //token: tokenJWT
+                        token: tokenJWT
                     })
                     return
                 }
