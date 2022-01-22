@@ -22,6 +22,7 @@ function preencheCamposForm() {
   }
 }
 function login(login, senha) {
+  console.log("aqui")
   let headersList = {
     "Accept": "*/*",
     "User-Agent": "Igor Mundim",
