@@ -129,23 +129,23 @@ apiRouter.post(endpoint + 'seguranca/login', (req, res) => {
         .select('*').from('usuario')
         .where({ login: req.body.login })
         .then(usuarios => {
-            // if (usuarios.length) {
-            //     let usuario = usuarios[0]
-            //     let checkSenha = bcrypt.compareSync(req.body.senha, usuario.senha)
-            //     console.log("aqui")
-            //     if (checkSenha) {
-            //         var tokenJWT = jwt.sign({ id: usuario.id },
-            //             process.env.SECRET_KEY,
-            //             {
-            //                 expiresIn: 3600
-            //             })
-            //         res.status(200).json({
-            //             messageAlert: null,
-            //             token: tokenJWT
-            //         })
-            //         return
-            //     }
-            // }
+            if (usuarios.length) {
+                let usuario = usuarios[0]
+                let checkSenha = bcrypt.compareSync(req.body.senha, usuario.senha)
+                console.log("aqui")
+                // if (checkSenha) {
+                //     var tokenJWT = jwt.sign({ id: usuario.id },
+                //         process.env.SECRET_KEY,
+                //         {
+                //             expiresIn: 3600
+                //         })
+                //     res.status(200).json({
+                //         messageAlert: null,
+                //         token: tokenJWT
+                //     })
+                //     return
+                // }
+            }
             res.status(200).json({ messageAlert: 'Login ou senha incorretos' })
         }).catch(err => {
             res.status(500).json({ messageAlert: 'Erro ao verificar login - ' + err.message })
