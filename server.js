@@ -19,8 +19,9 @@ app.use(express.urlencoded({ extended: true}))
 app.use(function (req, res, next) {console.log (req.query + "" + req.url); next() })
 
 // Instancia as rotas em outro ambiente desafogando a script atual
-app.use ('/app', express.static (path.join (__dirname, '/public')))
+app.use ('/app', express.static (path.join (__dirname, '/public/')))
 app.use('/api', apiRouter)
+app.use('/',express.static (path.join (__dirname, '/public/')))
 
 let port = process.env.PORT || 3000
 app.listen (port)
