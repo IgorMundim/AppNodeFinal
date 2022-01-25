@@ -1,0 +1,10 @@
+CREATE SEQUENCE extrato_id_seq;
+CREATE TABLE extrato (
+id int4 NOT NULL DEFAULT nextval('extrato_id_seq'),
+dataCompra date not NULL,
+descricao varchar(200) NOT NULL,
+valor numeric NOT NULL DEFAULT 0,
+detalhes varchar(100) NULL,
+CONSTRAINT extrato_pk PRIMARY KEY (id)
+);
+CREATE UNIQUE INDEX extrato_id_idx ON public.extrato USING btree (id);

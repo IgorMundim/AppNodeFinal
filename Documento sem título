@@ -1,10 +1,3 @@
-let tabelaDeProdutos = document.getElementById("tbProdutos");
-let index;
-
-function init() {
-listarProduto()
-}
-document.onload = init();
 
 function preencheCamposForm() {
 
@@ -121,26 +114,53 @@ function listarProduto() {
     "User-Agent": "Igor Mundim"
   }
 
-  fetch("/api/produtos", {
+  fetch("/api/extratos", {
     method: "GET",
     headers: headersList
   }).then(res => res.json())
-  .then( (data) => {
-    for (let i = 0; i < data.length; i++) {
-      let linha = tabelaDeProdutos.insertRow(i+1)
-      if (!(i % 2 === 0))
-        linha.style.background = "#E8E8E8";
-      let cellId = linha.insertCell(0);
-      let cellDescricao = linha.insertCell(1);
-      let cellValor = linha.insertCell(2);
-      let cellMarca = linha.insertCell(3);
-      cellId.innerHTML = data[i].id;
-      cellDescricao.innerHTML = data[i].descricao;
-      cellValor.innerHTML = data[i].valor;
-      cellMarca.innerHTML = data[i].marca;
-    }
-    preencheCamposForm()
+  .then( (extratoTotal) => {
+    // for (let i = 0; i < data.length; i++) {
+    //   let linha = tabelaDeProdutos.insertRow(i+1)
+    //   if (!(i % 2 === 0))
+    //     linha.style.background = "#E8E8E8";
+    //   let cellId = linha.insertCell(0);
+    //   let cellDescricao = linha.insertCell(1);
+    //   let cellValor = linha.insertCell(2);
+    //   let cellMarca = linha.insertCell(3);
+    //   cellId.innerHTML = data[i].id;
+    //   cellDescricao.innerHTML = data[i].descricao;
+    //   cellValor.innerHTML = data[i].valor;
+    //   cellMarca.innerHTML = data[i].marca;
+    // }
+    // preencheCamposForm()
+    let valorTotal = 0;
 
+
+        // for (let i = 0; i < extratoTotal.length; i++) {
+
+        //     let linha = tabelaDeExtrato.insertRow(i + 2);
+        //     if (!(i % 2 === 0))
+        //         linha.style.background = "#E8E8E8";
+        //     let cellData = linha.insertCell(0);
+        //     let cellCodigo = linha.insertCell(1);
+        //     let cellDescricao = linha.insertCell(2);
+        //     let cellValor = linha.insertCell(3);
+        //     let cellSaldo = linha.insertCell(4);
+        //     let cellDetalhes = linha.insertCell(5);
+        //     valorTotal += +extratoTotal[i].valor;
+
+        //     if (extratoTotal[i].valor < 0)
+        //         cellValor.style.color = "red";
+        //     cellCodigo.innerHTML = extratoTotal[i].codigo;
+        //     cellData.innerHTML = extratoTotal[i].data;
+        //     cellDescricao.innerHTML = extratoTotal[i].descricao;
+        //     cellValor.innerHTML = extratoTotal[i].valor;
+        //     cellDetalhes.innerHTML = extratoTotal[i].detalhes;
+        //     if (valorTotal < 0)
+        //         cellSaldo.style.color = "red";
+        //     cellSaldo.innerHTML = valorTotal;
+
+        // }
   })
   
 }

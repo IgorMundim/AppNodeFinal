@@ -113,7 +113,8 @@ apiRouter.post(endpoint + 'seguranca/register', userNameIsAvailable, emailIsAvai
         .then((result) => {
 
             res.status(200).json({
-                "messageAlert": "Usuário cadastrado com sucesso"})
+                "messageAlert": "Usuário cadastrado com sucesso"
+            })
             return
         })
         .catch(err => {
@@ -124,7 +125,7 @@ apiRouter.post(endpoint + 'seguranca/register', userNameIsAvailable, emailIsAvai
 })
 
 apiRouter.post(endpoint + 'seguranca/login', (req, res) => {
-    
+
     knex
         .select('*').from('usuario')
         .where({ login: req.body.login })
@@ -154,11 +155,11 @@ apiRouter.post(endpoint + 'seguranca/login', (req, res) => {
 
 
 // API Produtos
-apiRouter.get(endpoint + 'produtos', (req, res) => {
+apiRouter.get(endpoint + 'extratos', (req, res) => {
     knex
         .select('*')
-        .from('produto')
-        .then(produtos => res.status(200).json(produtos))
+        .from('extrato')
+        .then(extratos => res.status(200).json(extratos))
 })
 
 
@@ -183,37 +184,34 @@ apiRouter.get(endpoint + 'produtos/:id', (req, res) => {
 
 })
 
-apiRouter.post(endpoint + 'produtos',checkUser, (req, res) => {
-    knex('produto')
+apiRouter.post(endpoint + 'extratos', (req, res) => {
+    knex('extrato')
         .insert({
+            datacompra: req.body.datacompra,
             descricao: req.body.descricao,
             valor: req.body.valor,
-            marca: req.body.marca
-        }, ['id', 'descricao', 'valor', 'marca'])
+            detalhes: req.body.detalhes
+        })
         .then((result) => {
-            let produto = result[0]
             res.status(200).json({
-                "id": produto.id,
-                "descricao": produto.descricao,
-                "valor": produto.valor,
-                "marca": produto.marca,
                 "messageAlert": "inserido com sucesso!"
             })
             return
         })
         .catch(err => {
-            res.status(500).json({ messageAlert: "Erro ao inserir produto -" + err.message })
+            res.status(500).json({ messageAlert: "Erro ao inserir extrato -" + err.message })
         })
 
 })
 
-apiRouter.put(endpoint + 'produtos/:id',checkUser, (req, res) => {
-    knex('produto')
+apiRouter.put(endpoint + 'extratos/:id',  (req, res) => {
+    knex('extrato')
         .where({ id: req.params.id })
         .update({
+            datacompra: req.body.datacompra,
             descricao: req.body.descricao,
             valor: req.body.valor,
-            marca: req.body.marca
+            detalhes: req.body.detalhes
         }).then(() => res.status(200).json(
             { messageAlert: "Item alterado com sucesso!" }))
         .catch(err => res.status(200).json(

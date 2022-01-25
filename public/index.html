@@ -1,68 +1,236 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App Node</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Controle Financeiro</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Open+Sans:ital,wght@0,400;0,700;1,400&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/app.js" defer></script>
 </head>
-<body>
 
-  <nav>
-    <ul >
-      <li><a href="/app/login.html">Login</a></li>
+<body >
 
-    </ul>
-  </nav>
-    
-    <form id="fExtrato">
+  <input id="close-menu" class="close-menu" type="checkbox" aria-label="Close menu" role="button">
+  <label class="close-menu-label" for="close-menu" title="close menu"></label>
+  <aside class="menu menu-bg">
+    <div class="main-content menu-content">
+      <h1 onclick="getElementById('close-menu').checked = false;">
+        <a href="#home">Minhas Finanças</a>
+      </h1>
 
-
-      <fieldset class="form-grid">
-        <div class="form-group">
-          <label for="txtCodigo">ID: </label>
-          <input type="number" id="txtCodigo" placeholder="Código" required disabled />
-        </div>
-        <div class="form-group">
-          <label for="txtDescricao">Descrição: </label>
-          <input type="text" id="txtDescricao" placeholder="Descrição" />
-        </div>
-        <div class="form-group">
-          <label for="txtValor">Valor: </label>
-          <input type="number" id="txtValor" placeholder="Valor" />
-        </div>
-        <div class="form-group">
-          <label for="txtMarca">Marca: </label>
-          <input type="text" id="txtMarca" placeholder="Marca" />
-        </div>
-
-        <div class="form-group full-width">
-          <button type="button"
-            onclick="incluirProduto(txtDescricao.value, txtValor.value,txtMarca.value)">Inserir</button>
-          <button type="button"
-            onclick="alterarProduto(txtCodigo.value, txtDescricao.value, txtValor.value, txtMarca.value)">Alterar</button>
-          <button type="button" onclick="excluirProduto(txtCodigo.value)">Excluir</button>
-        </div>
-      </fieldset>
-    </form>
-
-    <div class="dtExtrato responsive-table">
-      <table id="tbProdutos">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Descrição</th>
-            <th>Valor</th>
-            <th>Marca</th>
-          </tr>
-        </thead>
-      </table>
+      <nav>
+        <ul onclick="getElementById('close-menu').checked = false;">
+          <li><a href="#home">Inicio</a></li>
+          <li><a href="#grid-one">Sobre</a></li>
+          <li><a href="#grid-two">Minha Carteira</a></li>
+          <li><a href="#manual">Manual do Usuário</a></li>
+          <li><a href="#contact">Contate-nos</a></li>
+          <li><a href="/app/login.html">Login</a></li>
+        </ul>
+      </nav>
     </div>
-  </div>
-</div>
-</section>
+  </aside>
 
-    <script src="app.js"></script>
+  <div class="menu-spacing"></div>
+
+  <section id="home" class="intro white-bg section">
+    <div class="main-content intro-content">
+      <div class="intro-text-content">
+        <h2>Sistema para controle financeiro online</h2>
+        <p>Completo, fácil de usar e gratuito*</p>
+      </div>
+      <div class="intro-img">
+        <img src="img/logo-minhas-economias.gif" alt="Logo de HTML, CSS e JS.">
+      </div>
+    </div>
+  </section>
+
+  <section id="grid-one" class="main-bg section">
+    <div class="main-content grid-one-content">
+      <h2 class="grid-main-heading">CONTROLE FINANCEIRO COMPLETO PARA VOCÊ E SUA FAMÍLIA</h2>
+      <p class="grid-description">Uma breve descrição.</p>
+
+      <div class="grid">
+        <article>
+          <h3>CARTÕES DE CRÉDITO</h3>
+          <p>Gerencie com precisão as despesas nos cartões de crédito.</p>
+        </article>
+        <article>
+          <h3>CONTROLE DE GASTOS</h3>
+          <p>Gerencie projetos para saber exatamente quanto gastou naquela reforma da casa ou na viagem de férias.</p>
+        </article>
+        <article>
+          <h3>TOTALMENTE GRATUITO</h3>
+          <p>Experimente nosso software sem gastar nada, sem surpresas futuras.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="grid-two" class="white-bg section">
+
+    <div class="main-content intro-content">
+      <p></p>
+      <div class="contact-form">
+
+        <form id="fExtrato">
+          <h2>Minha Carteira</h2>
+
+          <fieldset class="form-grid">
+            <div class="form-group">
+              <label for="txtData">Data inicial: </label>
+              <input type="date" id="txtDataInicial" min="1980-01-01" max="2050-01-10" />
+            </div>
+            <div class="form-group">
+              <label for="txtData">Data final: </label>
+              <input type="date" id="txtDataFinal" min="1980-01-01" max="2050-01-10" />
+            </div>
+            <div class="form-group full-width">
+              <button type="button" onclick="incluirEscopo(txtDataInicial.value,txtDataFinal.value)">Inserir
+                Período</button>
+            </div>
+          </fieldset>
+
+          <fieldset class="form-grid">
+
+            <div class="form-group">
+              <label for="txtData">Data: </label>
+              <input type="date" id="txtData" min="1980-01-01" max="2050-01-10" />
+            </div>
+
+            <div class="form-group">
+              <label for="txtCodigo">Código: </label>
+              <input type="number" id="txtCodigo" placeholder="Código" required />
+            </div>
+            <div class="form-group">
+              <label for="txtDescricao">Descrição: </label>
+              <input type="text" id="txtDescricao" placeholder="Descrição" />
+            </div>
+            <div class="form-group">
+              <label for="txtValor">Valor da fatura: </label>
+              <input type="number" id="txtValor" placeholder="Valor da fatura" />
+            </div>
+            <div class="form-group">
+              <label for="txtDetalhes">Detalhes: </label>
+              <input type="text" id="txtDetalhes" placeholder="Detalhes" />
+            </div>
+
+            <div class="form-group full-width">
+              <button type="button"
+                onclick="incluirExtrato(txtData.value, txtCodigo.value, txtDescricao.value, txtValor.value,txtDetalhes.value)">Inserir</button>
+              <button type="button"
+                onclick="alterarExtrato(txtData.value, txtCodigo.value, txtDescricao.value, txtValor.value, txtDetalhes.value)">Alterar</button>
+              <button type="button" onclick="armazenamentoExcluir()">Excluir</button>
+            </div>
+          </fieldset>
+        </form>
+
+
+
+        <div class="dtExtrato responsive-table">
+          <table id="tbExtrato">
+            <thead>
+              <tr>
+                <th colspan="2" onclick="">Inicio</th>
+                <th colspan="2" onclick="">Entrada</th>
+                <th colspan="2" onclick="">Saída</th>
+                
+              </tr>
+              <tr>
+                <th onclick="">Data</th>
+                <th onclick="">Código </th>
+                <th>Descrição</th>
+                <th>Valor</th>
+                <th>Saldo</th>
+                <th>Detalhes</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="manual" class=" main-bg section">
+    <div class="main-content grid-one-content">
+      <h2 class="grid-main-heading">Manual do usuário</h2>
+      <div class="intro-text-content" >
+        <nav>
+          <ul id="imagemNav">
+            <li><button id="btnImg01"><img class="imagemDisplay" src="img/imagem01.png" alt="Imagem 01"></button>
+            </li>
+            <li><button id="btnImg02"><img class="imagemDisplay" src="img/imagem02.png" alt="Imagem 01"></button>
+            </li>
+            <li><button id="btnImg03"><img class="imagemDisplay" src="img/imagem03.png" alt="Imagem 01"></button>
+            </li>
+          </ul>
+        </nav>
+
+        <div id="principal-div"><img id="principal" alt="Imagem principal" src="img/imagem01.png"></div>
+      </div>
+    </div>
+  </section>
+
+
+  <section id="contact" class="intro white-bg section">
+    <div class="main-content intro-content">
+      <div class="intro-text-content">
+        <h2>FALE CONOSCO</h2>
+        <p>Caso você seja usuário, utilize nosso sistema de atendimento.</p>
+      </div>
+      <div class="intro-img">
+        <img src="img/engrenagem.gif" alt="engrenagem">
+      </div>
+
+
+      <div class="contact-form">
+        <form id="fContact">
+          <fieldset class="form-grid">
+            <legend>Contate-nos</legend>
+
+            <div class="form-group">
+              <label for="nome">Nome</label>
+              <input type="text" name="nome" id="nome" placeholder="Nome">
+            </div>
+
+            <div class="form-group">
+              <label for="sobrenome">Sobrenome</label>
+              <input type="text" name="sobrenome" id="sobrenome" placeholder="Sobrenome">
+            </div>
+
+            <div class="form-group">
+              <label for="email">E-mail</label>
+              <input type="email" name="email" id="email" placeholder="E-mail">
+            </div>
+
+            <div class="form-group full-width">
+              <label for="menssagem">Mensagem</label>
+              <textarea name="menssagem" id="menssagem" cols="30" rows="10" placeholder="Mensagem"></textarea>
+            </div>
+
+            <div class="form-group full-width btn">
+              <button type="button"
+                onclick="enviarMensagem(nome.value, sobrenome.value, email.value, menssagem.value)">Enviar
+                Mensagem</button>
+            </div>
+          </fieldset>
+        </form>
+      </div>
+      
+    </div>
+  </section>
+
+
+  <footer id="footer" class="footer main-bg">
+    <p>©Trabalho 3 2021. Todos os direitos reservados.</p>
+  </footer>
+
+  <a class="back-to-top" href="#">➤</a>
 </body>
+
 </html>
