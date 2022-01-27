@@ -25,12 +25,13 @@
 
       <nav>
         <ul onclick="getElementById('close-menu').checked = false;">
-          <li><a href="#home">Inicio</a></li>
+
           <li><a href="#grid-one">Sobre</a></li>
           <li><a href="#grid-two">Minha Carteira</a></li>
-          <li><a href="#manual">Manual do Usuário</a></li>
+          <li><a href="#manual">Manual</a></li>
           <li><a href="#contact">Contate-nos</a></li>
           <li><a href="/app/login.html">Login</a></li>
+          <li><a href="/app/loginAdmin.html">Admin</a></li>
         </ul>
       </nav>
     </div>
@@ -125,7 +126,7 @@
                 onclick="incluirExtrato(txtData.value, txtCodigo.value, txtDescricao.value, txtValor.value,txtDetalhes.value)">Inserir</button>
               <button type="button"
                 onclick="alterarExtrato(txtData.value, txtCodigo.value, txtDescricao.value, txtValor.value, txtDetalhes.value)">Alterar</button>
-              <button type="button" onclick="armazenamentoExcluir()">Excluir</button>
+              <button type="button" onclick="excluirExtrato(txtCodigo.value)">Excluir</button>
             </div>
           </fieldset>
         </form>
@@ -136,14 +137,14 @@
           <table id="tbExtrato">
             <thead>
               <tr>
-                <th colspan="2" onclick="">Inicio</th>
-                <th colspan="2" onclick="">Entrada</th>
-                <th colspan="2" onclick="">Saída</th>
+                <th colspan="2" onclick="listarPorData()">Inicio</th>
+                <th colspan="2" onclick="listarPorEntrada()">Entrada</th>
+                <th colspan="2" onclick="listarPorSaida()">Saída</th>
                 
               </tr>
               <tr>
-                <th onclick="">Data</th>
-                <th onclick="">Código </th>
+                <th onclick="listarPorData()">Data</th>
+                <th onclick="listarPorCodigo()">Código </th>
                 <th>Descrição</th>
                 <th>Valor</th>
                 <th>Saldo</th>
@@ -227,7 +228,7 @@
 
 
   <footer id="footer" class="footer main-bg">
-    <p>©Trabalho 3 2021. Todos os direitos reservados.</p>
+    <p>©Trabalho Node 2021. Todos os direitos reservados.</p>
   </footer>
 
   <a class="back-to-top" href="#">➤</a>

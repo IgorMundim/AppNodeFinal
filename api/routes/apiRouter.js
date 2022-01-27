@@ -36,12 +36,59 @@ let checkUser = (req, res, next) => {
         })
     }
 }
+let checkLogin = (req, res, next) => {
+    //localiza o usuário no banco de dados
+
+    //valida a informação (senha | token) passada
+    let authToken = req.headers["authorization"]
+
+    if (!authToken) {
+        res.status(401).json({ "messageAlert": "Efetue login para uma melhor experiência!" })
+        return
+    } else {
+        let token = authToken.split(" ")[1]
+        req.token = token
+
+        jwt.verify(req.token, process.env.SECRET_KEY, (err, decodeToken) => {
+            if (err) {
+                res.status(401).json({ "messageAlert": "Efetue login para uma melhor experiência!" })
+                return
+            }
+            req.usuarioId = decodeToken.id
+            next()
+        })
+    }
+}
+
 
 let isAdmin = (req, res, next) => {
     knex
         .select("*")
         .from("usuario")
         .where({ id: req.usuarioId })
+        .then(usuarios => {
+            if (!usuarios.length) {
+                res.status(401).json({ "messageAlert": "Acesso negado" })
+                return
+            }
+
+            let usuario = usuarios[0]
+            let roles = usuario.roles.split(";")
+            let adminRole = roles.find(i => i === 'ADMIN')
+            if (adminRole === 'ADMIN') {
+                next()
+                return
+            } else {
+                res.status(403).json({ "messageAlert": "Acesso restrito a administradores" })
+            }
+        })
+}
+
+let isAdm = (req, res, next) => {
+    knex
+        .select("*")
+        .from("usuario")
+        .where( { login: req.body.login })
         .then(usuarios => {
             if (!usuarios.length) {
                 res.status(401).json({ "messageAlert": "Acesso negado" })
@@ -95,11 +142,80 @@ let emailIsAvailable = (req, res, next) => {
         })
 }
 
+let idIsAvailable = (req, res, next) => {
+    knex
+        .select("*")
+        .from("extrato")
+        .where({ id: req.body.id })
+        .then(extratos => {
 
+            if (extratos.length) {
+                res.status(200).json({ "messageAlert": `O código ${req.body.id} já está em uso!` })
+                return
+            } else {
+                next()
+                return
+            }
+        })
+}
 
+let idNotAvailable = (req, res, next) => {
+    knex
+        .select("*")
+        .from("extrato")
+        .where({ id: req.params.id})
+        .then(extratos => {
+
+            if (extratos.length) {
+                next()
+                return
+            } else {
+                res.status(200).json({ "messageAlert": `O código ${req.params.id} não existe!` })
+                return
+            }
+        })
+}
+
+let idUserNotAvailable = (req, res, next) => {
+    knex
+        .select("*")
+        .from("usuario")
+        .where({ id: req.params.id})
+        .then(usuarios => {
+
+            if (usuarios.length) {
+                next()
+                return
+            } else {
+                res.status(200).json({ "messageAlert": `O código ${req.params.id} não existe!` })
+                return
+            }
+        })
+}
 
 let endpoint = '/'
 
+//API Usuario
+apiRouter.get(endpoint + 'usuarios', isAdm, (req, res) => {
+    knex
+        .select('id', 'nome', 'email', 'login', 'roles')
+        .from('usuario')
+        .then(usuarios => res.status(200).json(usuarios))
+})
+
+apiRouter.put(endpoint + 'usuarios/:id', isAdm, idUserNotAvailable, (req, res) => {
+    knex('usuario')
+        .where({ id: req.params.id })
+        .update({
+            nome: req.body.nome,
+            login: req.body.login,
+            email: req.body.email,
+            roles: req.body.roles
+        }).then(() => res.status(200).json(
+            { messageAlert: "Usuário alterado com sucesso!"}))
+        .catch(err => res.status(200).json(
+            { messageAlert: "Erro no servidor -" + err.message }))
+})
 
 apiRouter.post(endpoint + 'seguranca/register', userNameIsAvailable, emailIsAvailable, (req, res) => {
 
@@ -113,7 +229,7 @@ apiRouter.post(endpoint + 'seguranca/register', userNameIsAvailable, emailIsAvai
         .then((result) => {
 
             res.status(200).json({
-                "messageAlert": "Usuário cadastrado com sucesso"
+                "messageAlert": "Usuário cadastrado com sucesso!"
             })
             return
         })
@@ -123,7 +239,15 @@ apiRouter.post(endpoint + 'seguranca/register', userNameIsAvailable, emailIsAvai
             })
         })
 })
-
+apiRouter.delete(endpoint + 'usuarios/:id',isAdm, idUserNotAvailable, (req, res) => {
+    knex('usuario')
+        .where({ id: req.params.id })
+        .del()
+        .then(() => res.status(200).json(
+            { messageAlert: "Item excluido com sucesso" }))
+        .catch(err => res.status(200).json(
+            { messageAlert: "Erro no servidor -" + err.message }))
+})
 apiRouter.post(endpoint + 'seguranca/login', (req, res) => {
 
     knex
@@ -133,7 +257,6 @@ apiRouter.post(endpoint + 'seguranca/login', (req, res) => {
             if (usuarios.length) {
                 let usuario = usuarios[0]
                 let checkSenha = bcrypt.compareSync(req.body.senha, usuario.senha)
-                console.log("aqui")
                 if (checkSenha) {
                     let tokenJWT = jwt.sign({ id: usuario.id },
                         process.env.SECRET_KEY,
@@ -153,40 +276,93 @@ apiRouter.post(endpoint + 'seguranca/login', (req, res) => {
         })
 })
 
+apiRouter.post(endpoint + 'seguranca/login/admin', isAdm, (req, res) => {
 
-// API Produtos
-apiRouter.get(endpoint + 'extratos', (req, res) => {
+    knex
+        .select('*').from('usuario')
+        .where({ login: req.body.login })
+        .then(usuarios => {
+            if (usuarios.length) {
+                let usuario = usuarios[0]
+                let checkSenha = bcrypt.compareSync(req.body.senha, usuario.senha)
+                if (checkSenha) {
+                    let tokenJWT = jwt.sign({ id: usuario.id },
+                        process.env.SECRET_KEY,
+                        {
+                            expiresIn: 3600
+                        })
+                    res.status(200).json({
+                        messageAlert: null,
+                        token: tokenJWT
+                    })
+                    return
+                }
+            }
+            res.status(200).json({ messageAlert: 'Login ou senha incorretos' })
+        }).catch(err => {
+            res.status(500).json({ messageAlert: 'Erro ao verificar login - ' + err.message })
+        })
+})
+
+// API Contato
+apiRouter.post(endpoint + 'contatos', checkUser, (req, res)  => {
+    knex('contato')
+        .insert({
+            nome: req.body.nome,
+            sobrenome: req.body.sobrenome,
+            email: req.body.email,
+            mensagem: req.body.mensagem
+        })
+        .then((result) => {
+            res.status(200).json({
+                "messageAlert": "inserido com sucesso!"
+            })
+            return
+        })
+        .catch(err => {
+            res.status(500).json({ messageAlert: "Erro ao inserir mensagem"})
+        })
+
+})
+// API Extrato
+apiRouter.get(endpoint + 'extratos', checkLogin, (req, res) => {
     knex
         .select('*')
         .from('extrato')
         .then(extratos => res.status(200).json(extratos))
 })
 
+apiRouter.get(endpoint + 'extrato/entrada', checkLogin,  (req, res) => {
+     knex('extrato')
+         .where('valor','>','0')
+        .then(extratos => res.status(200).json(extratos))
+})
+
+apiRouter.get(endpoint + 'extrato/saida', checkLogin,  (req, res) => {
+    knex('extrato')
+        .where('valor','<','0')
+       .then(extratos => res.status(200).json(extratos))
+})
 
 
-apiRouter.get(endpoint + 'produtos/:id', (req, res) => {
+apiRouter.get(endpoint + 'extratos/:id', checkLogin, (req, res) => {
 
     knex
         .select('*')
-        .from('produto')
+        .from('extrato')
         .where({ id: req.params.id })
-        .then(produtos => {
-            if (produtos.length) {
-                let produto = produtos[0]
-                res.status(200).json(produto)
-            }
-            else {
-                res.status(404).json({ messageAlert: "Item não localizado" })
-            }
+        .then(extratos => {
+            res.status(200).json(extratos)
         })
         .catch(err => res.status(500).json(
             { messageAlert: "Item não localizado" + err.message }))
 
 })
 
-apiRouter.post(endpoint + 'extratos', (req, res) => {
+apiRouter.post(endpoint + 'extratos',checkUser, idIsAvailable, (req, res)  => {
     knex('extrato')
         .insert({
+            id: req.body.id,
             datacompra: req.body.datacompra,
             descricao: req.body.descricao,
             valor: req.body.valor,
@@ -199,12 +375,12 @@ apiRouter.post(endpoint + 'extratos', (req, res) => {
             return
         })
         .catch(err => {
-            res.status(500).json({ messageAlert: "Erro ao inserir extrato -" + err.message })
+            res.status(500).json({ messageAlert: "Erro ao inserir extrato código indisponivel"})
         })
 
 })
 
-apiRouter.put(endpoint + 'extratos/:id',  (req, res) => {
+apiRouter.put(endpoint + 'extratos/:id', checkUser, isAdmin, idNotAvailable, (req, res) => {
     knex('extrato')
         .where({ id: req.params.id })
         .update({
@@ -213,13 +389,13 @@ apiRouter.put(endpoint + 'extratos/:id',  (req, res) => {
             valor: req.body.valor,
             detalhes: req.body.detalhes
         }).then(() => res.status(200).json(
-            { messageAlert: "Item alterado com sucesso!" }))
+            { messageAlert: "Item alterado com sucesso!"}))
         .catch(err => res.status(200).json(
             { messageAlert: "Erro no servidor -" + err.message }))
 })
 
-apiRouter.delete(endpoint + 'produtos/:id', checkUser, isAdmin, (req, res) => {
-    knex('produto')
+apiRouter.delete(endpoint + 'extratos/:id', checkUser, isAdmin, idNotAvailable, (req, res) => {
+    knex('extrato')
         .where({ id: req.params.id })
         .del()
         .then(() => res.status(200).json(

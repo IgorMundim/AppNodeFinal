@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Controle Financeiro</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Open+Sans:ital,wght@0,400;0,700;1,400&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script src="js/appAdmin.js" defer></script>
+</head>
+
+<body >
+
+  <input id="close-menu" class="close-menu" type="checkbox" aria-label="Close menu" role="button">
+  <label class="close-menu-label" for="close-menu" title="close menu"></label>
+  <aside class="menu menu-bg">
+    <div class="main-content menu-content">
+      <h1 onclick="getElementById('close-menu').checked = false;">
+        <a href="#home">Minhas Finanças</a>
+      </h1>
+
+      <nav>
+        <ul onclick="getElementById('close-menu').checked = false;">
+
+          <li><a href="/app/#grid-one">Sobre</a></li>
+          <li><a href="/app/#grid-two">Minha Carteira</a></li>
+          <li><a href="/app/#manual">Manual</a></li>
+          <li><a href="/app/#contact">Contate-nos</a></li>
+          <li><a href="/app/login.html">Login</a></li>
+        </ul>
+      </nav>
+    </div>
+  </aside>
+
+  <div class="menu-spacing"></div>
+
+
+
+
+  <section id="grid-two" class="white-bg section">
+
+    <div class="main-content intro-content">
+      <p></p>
+      <div class="contact-form">
+
+        <form id="fExtrato">
+          <h2>Painel de Usuário</h2>
+
+          <fieldset class="form-grid">
+          </fieldset>
+
+          <fieldset class="form-grid">
+
+            <div class="form-group">
+              <label for="txtId">ID: </label>
+              <input type="number" id="txtId" placeholder="Id" required />
+            </div>
+            <div class="form-group">
+              <label for="txtNome">Nome: </label>
+              <input type="text" id="txtNome" placeholder="Nome" />
+            </div>
+            <div class="form-group">
+              <label for="txtLogin">Login: </label>
+              <input type="text" id="txtLogin" placeholder="Login" />
+            </div>
+            <div class="form-group">
+              <label for="txtEmail">Email: </label>
+              <input type="email" id="txtEmail" placeholder="Email" />
+            </div>
+            
+            <label for="txtTipo">
+            </label >
+            <select id="txtTipo">
+              <optgroup label="Tipo de Acesso">
+                <option value="USER;ADMIN">USER;ADMIN</option>
+                <option value="USER">USER</option>
+              
+              </optgroup>
+              
+            </select>
+            <div class="form-group full-width">
+              <button type="button"
+                onclick="alterarUsuario(txtId.value, txtNome.value,txtLogin.value, txtEmail.value, txtTipo.value)">Alterar</button>
+              <button type="button" onclick="excluirUsuario(txtId.value)">Excluir</button>
+            </div>
+          </fieldset>
+        </form>
+
+
+        <div class="dtExtrato responsive-table">
+          <table id="tbUsuario">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Login </th>
+                <th>E-mail</th>
+                <th>Tipo de Acesso</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+
+  <a class="back-to-top" href="#">➤</a>
+</body>
+
+</html>
