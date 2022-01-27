@@ -138,7 +138,7 @@ function alterarExtrato(dataCompra, codigo, descricao, valor, detalhes) {
       }).then(res => res.json())
         .then((usuario) => {
           
-          getUsuario()
+          getExtrato()
         })
     } else
       alert("Possui compos vazios");
