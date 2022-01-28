@@ -70,7 +70,7 @@ function preencheCamposForm() {
   }
 }
 
-function alterarUsuario(id, nome, email,login,  tipo) {
+function alterarUsuario(id, nome, login, email,  tipo) {
 
   if (id != "" && nome != "" && email != "" && tipo != '') {
   let headersList = {
