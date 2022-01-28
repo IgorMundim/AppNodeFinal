@@ -196,14 +196,14 @@ let idUserNotAvailable = (req, res, next) => {
 let endpoint = '/'
 
 //API Usuario
-apiRouter.get(endpoint + 'usuarios', isAdm, (req, res) => {
+apiRouter.get(endpoint + 'usuarios', checkUser, isAdmin, (req, res) => {
     knex
         .select('id', 'nome', 'email', 'login', 'roles')
         .from('usuario')
         .then(usuarios => res.status(200).json(usuarios))
 })
 
-apiRouter.put(endpoint + 'usuarios/:id', isAdm, idUserNotAvailable, (req, res) => {
+apiRouter.put(endpoint + 'usuarios/:id', checkUser, isAdmin,  idUserNotAvailable, (req, res) => {
     knex('usuario')
         .where({ id: req.params.id })
         .update({
@@ -239,7 +239,7 @@ apiRouter.post(endpoint + 'seguranca/register', userNameIsAvailable, emailIsAvai
             })
         })
 })
-apiRouter.delete(endpoint + 'usuarios/:id',isAdm, idUserNotAvailable, (req, res) => {
+apiRouter.delete(endpoint + 'usuarios/:id', checkUser, isAdmin, idUserNotAvailable, (req, res) => {
     knex('usuario')
         .where({ id: req.params.id })
         .del()

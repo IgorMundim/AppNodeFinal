@@ -136,8 +136,8 @@ function alterarExtrato(dataCompra, codigo, descricao, valor, detalhes) {
         body: ` {\n\n    \"datacompra\": \"${dataCompra}\",\n    \"descricao\": \"${descricao}\",\n    \"valor\": \"${valor}\",\n    \"detalhes\": \"${detalhes}\"\n  }`,
         headers: headersList
       }).then(res => res.json())
-        .then((usuario) => {
-          
+        .then((extrato) => {
+          alert(extrato.messageAlert)
           getExtrato()
         })
     } else
@@ -163,8 +163,8 @@ function incluirExtrato(dataCompra, codigo, descricao, valor, detalhes) {
         headers: headersList
       }).then(res => res.json())
         .then((extrato) => {
-          getExtrato()
           alert(extrato.messageAlert)
+          getExtrato()
         })
     } else
       alert("Possui compos vazios");

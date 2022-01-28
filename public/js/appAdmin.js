@@ -14,7 +14,7 @@ function getUsuario() {
   let headersList = {
     "Accept": "*/*",
     "User-Agent": "Igor Mundim",
-    "Authorization": `Bearer ${gerenciarToken()}`,
+    "Authorization": `Bearer ${gerenciarToken()}`
   }
 
   fetch("/api/usuarios", {
@@ -76,6 +76,7 @@ function alterarUsuario(id, nome, email,login,  tipo) {
   let headersList = {
       "Accept": "*/*",
       "User-Agent": "Igor Mundim",
+      "Authorization": `Bearer ${gerenciarToken()}`,
       "Content-Type": "application/json"
      }
      
